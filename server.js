@@ -32,21 +32,25 @@ app.get('/weatherInfo', (req, res) => {
 app.get('/weather', (req, res) =>{
   let searchQuery = req.query.searchQuery;
 
-  // create a new forecast clas //
-  let weatherForecast = new Forecast(searchQuery);
-  let cityData = weatherForecast.getCityData();
 
-  res.status(200).send(cityData);
+  //grabbing the city from static data. find to grab the Seattle object and store it into city
+  const city = weatherInfo.find(city => city.city_name.toLowerCase() === searchQuery.toLowerCase())
+//   console.log(city);
+
+  // create a new forecast clas. we are maping over data and every object is a day. we pass that say into new forecast//
+  let weatherForecast = city.data.map(day => new Forecast(day));
+
+
+  res.status(200).send(weatherForecast);
 });
 
+// storing information into new object. 
 class Forecast {
+  constructor(day) {
+    this.date = day.valid_date
+    this.description = day.weather.description
 
-// create a constructor 
-
-
-
-
-
+  }
+}
 
 app.listen(PORT, () => console.log(`listening on ${PORT}`));
-
