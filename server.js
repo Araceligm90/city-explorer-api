@@ -47,9 +47,8 @@ app.get('/weather', (req, res) =>{
 // storing information into new object. 
 class Forecast {
   constructor(day) {
-    this.date = day.valid_date
-    this.description = day.weather.description
-
+    this.date = day.valid_date,
+    this.description = day.weather.description,
   }
 }
 
