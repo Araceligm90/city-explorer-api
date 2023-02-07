@@ -72,14 +72,14 @@ class Forecast {
 }
 
 class Movies {
-  constructor(film) {
-    this.ttile = film.title,
-    this.overview = film.overview,
-    this.average_votes = film.vote_average,
-    this.total_votes = film.vote_count,
-    this.image_url = film.poster_path,
-    this.popularity = film.popularity,
-    this.released_on = film.released_date
+  constructor(movie) {
+    this.ttile = movie.title,
+    this.overview = movie.overview,
+    this.average_votes = movie.vote_average,
+    this.total_votes = movie.vote_count,
+    this.image_url = movie.poster_path,
+    this.popularity = movie.popularity,
+    this.released_on = movie.released_date
   }
 }
 
