@@ -1,86 +1,77 @@
 'use strict';
 
-// we bring in dotenv
+// we bring in dotenv //
 require('dotenv').config();
 
-//we bring in express
+//we bring in express //
 const express = require('express');
 
-// initializing express library
+// initializing express library //
 const app = express();
 
-// we bring in cors
+// we bring in cors //
 const cors = require('cors');
 
-// anyone can make a request
-app.use(cors());
+// anyone can make a request //
 
-//bringing in axios
-const axios = require('axios')
+// bringing in axios //
+const axios = require('axios');
 
 const PORT = process.env.PORT || 3002;
 
-// allows us to access weater.json
+// allows us to access weater.json //
 const weatherInfo = require('./data/weather.json');
 
 app.get('/', (request, response) => {
   response.send('Your default endpoint is working');
 });
 
-app.get('/weatherInfo', (req, res) => {
-  res.send(weatherInfo);
-});
-
-
 app.get('/weather', async (req, res) => {
-  let searchQuery = req.query.searchQuery;
+  let city = req.query.searchQuery;
 
-  let weatherUrl = `https://api.weatherbit.io/v2.0/forecast/daily/?key=${process.env.WEATHER_API_KEY}&city=${searchQuery}&day=10`
+  let weatherUrl = `https://api.weatherbit.io/v2.0/forecast/daily?city=${city}&key=${process.env.WEATHER_API_KEY}&days=10`;
+  console.log(response.data);
+  // response to get the live weather data //
   let response = await axios.get(weatherUrl);
-  // create a new forecast class. we are maping over data and every object is a day. we pass that say into new forecast//
-  let weatherForecast = response.data.data.map(day => new Forecast(day));
-  res.status(200).send(weatherForecast);
-}
-);
-
-//grabbing the city from static data. find to grab the Seattle object and store it into city. Commented our for server info
-// const city = weatherInfo.find(city => city.city_name.toLowerCase() === searchQuery.toLowerCase())
-//   console.log(city);
+  // we feed the weather data to our Forecast class //
+  let liveInfo = response.data.data.map(day => new Forecast(day));
+  // we send out the data
+  res.status(200).send(liveInfo);
+});
 
 
 
 app.get('/movies', async (req, res) => {
-  let searchQuery2 = req.query.searchQuery2;
+  let movie = req.query.searchQuery;
 
-  let movieUrl = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.MOVIE_APY_KEY}&query=${searchQuery2}`
-
-  let response2 = await axios.get(movieUrl);
-  let movieList = response2.data.results.map(obj => new Movies(obj));
-
-  res.status(200).send(movieList);
-
+  let moviesUrl = `https://api.themoviedb.org/3/search/movie/?api_key=${process.env.MOVIE_APY_KEY}&query=${movie}`;
+  let response = await axios.get(moviesUrl);
+  console.log(response.data);
+  let liveInfo = response.data.results.map(movie => new Movies(movie));
+  res.status(200).send(liveInfo);
 });
 
 
-
-// storing information into new object.
+// create a weather class so we can store the information in it. //
 class Forecast {
   constructor(day) {
-    this.date = day.valid_date,
-    this.description = day.weather.description
+    this.date = day.valid_date;
+    this.description = day.weather.description;
   }
 }
 
+// create a movies class so we can store info in it
 class Movies {
   constructor(movie) {
-    this.ttile = movie.title,
-    this.overview = movie.overview,
-    this.average_votes = movie.vote_average,
-    this.total_votes = movie.vote_count,
-    this.image_url = movie.poster_path,
-    this.popularity = movie.popularity,
-    this.released_on = movie.released_date
+    this.title = movie.title;
+    this.overview = movie.overview;
+    this.average_votes = movie.average_votes;
+    this.poster = movie.poster_path;
+    this.popularity = movie.popularity;
+    this.released_on = movie.release_date
   }
 }
+
+
 
 app.listen(PORT, () => console.log(`listening on ${PORT}`));
