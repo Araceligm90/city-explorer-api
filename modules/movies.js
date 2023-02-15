@@ -5,7 +5,8 @@ const axios = require('axios');
 
 function getMovies (req, res, next) {
   let movie = req.query.searchQuery;
-  let moviesUrl = `https://api.themoviedb.org/3/search/movie/?api_key=${process.env.MOVIE_APY_KEY}&query=${movie}`;
+  let moviesUrl = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.MOVIE_API_KEY}&query=${movie}`;
+  console.log(process.env.MOVIE_API_KEY);
 
   axios.get(moviesUrl)
     .then(response => {
@@ -23,11 +24,12 @@ class Movies {
     this.average_votes = movie.average_votes;
     this.poster = movie.poster_path;
     this.popularity = movie.popularity;
-    this.released_on = movie.release_date
+    this.released_on = movie.release_date;
   }
 }
 
 
+// OLD NON COMPONETIZED CODE
 // let movie = req.query.searchQuery;
 // let moviesUrl = `https://api.themoviedb.org/3/search/movie/?api_key=${process.env.MOVIE_APY_KEY}&query=${movie}`;
 // let response = await axios.get(moviesUrl);

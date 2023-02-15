@@ -21,7 +21,7 @@ const getWeather = require('./modules/weather');
 const getMovies = require('./modules/movies');
 
 // allows us to access weater.json //
-const weatherInfo = require('./data/weather.json');
+// const weatherInfo = require('./data/weather.json');
 
 app.get('/', (request, response) => {
   response.send('Your default endpoint is working');
